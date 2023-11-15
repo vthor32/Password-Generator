@@ -2,32 +2,37 @@
 #include <time.h>
 #include "mtwister.h"
 
-//Função para retornar os caracteres que podem ser usados na senha
-char password_characters(int num_IN,int spe_IN){
-    char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (num_IN == 1 && spe_IN == 1){
-        char charset[] = "!@#$?&*()+-./|',<.>;:¿[]{}^~`=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    }else if(num_IN == 1 && spe_IN == 0){
-        char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    }else if(num_IN == 0 && spe_IN == 1){
-        char charset[] = "!@#$?&*()+-./|',<.>;:¿[]{}^~`=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    }else{
-        
+int strlen1(const char* str)
+{
+    int i = 0;
+    while(str[i] != '\0'){
+        i++;
     }
-    return charset;
+    return (i);
 }
-
 //Função para gerar senhas
-void generate_password(char *password, int length, MTRand *r){
+void generate_password(char *password, int length, MTRand *r) {
     int num_IN, spe_IN;
-    printf("Should the password have numbers? 0/1 (no/yes) \n");
-    scanf("%d", &num_IN);
-    printf("Should the password have speecial characters? 0/1 (no/yes) \n");
-    scanf("%d", &spe_IN);
-    
-    const char charset[] = password_characters(num_IN, spe_IN);
-    const int charset_size = sizeof(charset) - 1;
+    const char *charset;
 
+    printf("Should the password have numbers? 0/1 (no/yes)\n");
+    scanf("%d", &num_IN);
+    //printf("%d", num_IN);
+    printf("Should the password have special characters? 0/1 (no/yes)\n");
+    scanf("%d", &spe_IN);
+    //printf("%d", spe_IN);
+
+
+    if (num_IN == 1 && spe_IN == 1) {
+        charset = "!@#$?&*()+-./|',<.>;:¿[]{}^~`=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    } else if (num_IN == 1) {
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    } else if (spe_IN == 1) {
+        charset = "!@#$?&*()+-./|',<.>;:¿[]{}^~`=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    } else {
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    }
+    const int charset_size = strlen1(charset);
     for (int i = 0; i < length; ++i) {
         int index = (int)(genRand(r) * charset_size);
         password[i] = charset[index];
